@@ -11,7 +11,7 @@
 package 商品管理システム;
 
 import java.nio.charset.Charset;
-import java.util.ArrayList;
+// import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -27,7 +27,11 @@ public class Main {
 
 			// 現在は起動時にCSVの全商品をArrayListへ読み込んでいる。
 			// TODO【担当1＋担当3】DB版ではこの一覧を持たず、Repositoryを作って各機能へ渡す。
-			ArrayList<Product> products = CsvManager.readCsv();
+			// ArrayList<Product> products = CsvManager.readCsv();
+			
+			// DB 化
+			ProductRepository repository = new PostgreSqlProductRepository();
+
 
 			while (true) {
 				System.out.print("[メニュー] 1:検索 2:登録 3:変更 4:削除 0:終了>");
@@ -37,10 +41,11 @@ public class Main {
 
 					// メニュー番号に応じて担当クラスへ処理を渡す。
 					switch (menuNumber) {
-					case "1" -> Search.search(products, sc);
-					case "2" -> Register.register(products, sc);
-					case "3" -> Update.update(products, sc);
-					case "4" -> Delete.delete(products, sc);
+					case "1" -> Search.search(repository, sc);
+					// case "1" -> Search.search(products, sc);
+					// case "2" -> Register.register(products, sc);
+					// case "3" -> Update.update(products, sc);
+					// case "4" -> Delete.delete(products, sc);
 					case "0" -> {
 						System.out.println("プログラムを終了します。");
 						return;

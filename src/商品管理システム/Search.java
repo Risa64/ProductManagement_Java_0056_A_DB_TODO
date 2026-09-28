@@ -10,21 +10,36 @@
  */
 package 商品管理システム;
 
-import java.util.ArrayList;
+import java.sql.SQLException;
+// import java.util.ArrayList;
 import java.util.List;
 
 public class Search {
 
-	public static void search(ArrayList<Product> products, InputScanner sc) {
+	public static void search(ProductRepository repository, InputScanner sc) {
+	// public static void search(ArrayList<Product> products, InputScanner sc) {
+
 		while (true) {
 			System.out.println("'------------------------------------");
 			System.out.println("商品情報を検索します。");
 			System.out.println("検索キーワードを入力してください。");
 			System.out.print("キーワード >");
 			String keyword = sc.nextLine();
+
 			// 入力されたキーワードに合う商品だけを集める。
 			// TODO【担当3】DB版ではこの呼び出しをrepository.search(keyword)へ変更する。
-			List<Product> result = searchProducts(products, keyword);
+			List<Product> result;
+			// List<Product> result = searchProducts(products, keyword);
+
+			// DB化
+			try {
+				result = searchProducts(repository, keyword);
+			} catch (SQLException e) {
+				System.out.println("処理を実行できませんでした。システム管理者に連絡してください。");
+                e.printStackTrace();
+                return;
+			}
+
 			System.out.println("検索結果は" + result.size() + "件です。");
 			System.out.println("'------------------------------------");
 			for (Product product : result) {
@@ -51,24 +66,28 @@ public class Search {
 	
 	// 商品ID・商品コード・商品名のどれかにキーワードが含まれれば検索結果に入れる。
 	// 空文字の場合は全商品が条件に一致する。
-	private static List<Product> searchProducts(ArrayList<Product> products, String keyword) {
-		List<Product> result = new ArrayList<>();
+	private static List<Product> searchProducts(ProductRepository repository, String keyword) throws SQLException {
 
-		for (Product product : products) {
+	// private static List<Product> searchProducts(ArrayList<Product> products, String keyword) {
+		// List<Product> result = new ArrayList<>();
 
-			if (keyword.equals("")
-					|| product.getProductId().contains(keyword)
-					|| product.getProductCode().contains(keyword)
-					|| product.getProductName().contains(keyword)) {
+		// for (Product product : products) {
 
-				result.add(product);
-			}
-		}
+		// 	if (keyword.equals("")
+		// 			|| product.getProductId().contains(keyword)
+		// 			|| product.getProductCode().contains(keyword)
+		// 			|| product.getProductName().contains(keyword)) {
+
+		// 		result.add(product);
+		// 	}
+		// }
 
 		// 仕様どおり商品IDの昇順に並べる。
 		// TODO【担当3】DB版ではORDER BY product_idでDB側に並べてもらう。
-		result.sort((a, b) -> a.getProductId().compareTo(b.getProductId()));
+		// result.sort((a, b) -> a.getProductId().compareTo(b.getProductId()));
 
-		return result;
+		return repository.searchProduct(keyword);
+		// return result;
+		
 	}
 }
