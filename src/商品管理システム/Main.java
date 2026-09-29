@@ -45,7 +45,7 @@ public class Main {
 					// case "1" -> Search.search(products, sc);
 					// case "2" -> Register.register(products, sc);
 					// case "3" -> Update.update(products, sc);
-					// case "4" -> Delete.delete(products, sc);
+					case "4" -> Delete.delete(repository, sc);
 					case "0" -> {
 						System.out.println("プログラムを終了します。");
 						return;

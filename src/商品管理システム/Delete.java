@@ -12,19 +12,35 @@
 package 商品管理システム;
 
 import java.util.ArrayList;
+//DB
+import java.sql.SQLException;
 
 public class Delete {
 
 	
-	public static void delete(ArrayList<Product> products, InputScanner sc) {
+	public static void delete(ProductRepository repository, InputScanner sc) {
+	// public static void delete(ArrayList<Product> products, InputScanner sc) {
 		while (true) {
 			System.out.println("商品情報を削除します。");
 			System.out.println("削除する商品IDを入力してください");
 			System.out.print("削除する商品ID > ");
 			String productId = sc.nextLine();
+
 			// 削除前に対象商品を取得して、存在確認と削除内容の表示に使う。
 			// TODO【担当5】DB版ではrepository.findById()でdeleted=0の商品を取得し、version_noも保持する。
-			Product target = findProductById(products, productId);
+
+			Product target;
+
+			try {
+				target = findProductById(repository, productId); // Need to change Method name
+			// Product target = findProductById(products, productId);
+			} catch (SQLException e) {
+				System.out.println("処理を実行できませんでした。システム管理者に連絡してください。");
+                e.printStackTrace();
+                return;
+			}
+
+
 			if (target == null) {
 				System.out.println("存在しない商品IDです。");
 				
@@ -42,17 +58,39 @@ public class Delete {
 			while (true) {
 				System.out.print("この商品を削除しますか？ Y/N >");
 				String answer = sc.nextLine();
+				
 				if (answer.equalsIgnoreCase("Y")) {
 					// TODO【担当5】DB版ではremoveやDELETEを使わない。
 					// productId＋version_noを条件にdeleted=1へUPDATEし、更新件数0なら同時更新エラーとする。
-					products.remove(target);
+					// products.remove(target); // 不要
+					// CsvManager.writeCsv(products); // 不要
 					
-					CsvManager.writeCsv(products);
+					// DB
+					boolean deleted;
+					try {
+						deleted = repository.deleteProduct(target.getProductId(), target.getVersionNo());
+					} catch (SQLException e) {
+						System.out.println("処理を実行できませんでした。システム管理者に連絡してください。");
+                        e.printStackTrace();
+                        return;
+					}
+
+					// DB
+					if (!deleted) {
+						System.out.println("他の処理で商品情報が変更されたため、削除できませんでした。");
+                        return;
+					}
+
 					System.out.println("商品情報を削除しました。");
+	
+					// DB
+					System.out.println(target);
 					break;
+
 				} else if (answer.equalsIgnoreCase("N")) {
 					System.out.println("削除をキャンセルしました。");
 					break;
+
 				} else {
 					System.out.println("YまたはNを入力してください。");
 				}
@@ -77,13 +115,18 @@ public class Delete {
 	
 	// 現在は起動時に読み込んだ全商品から、商品IDが同じものを順番に探している。
 	// TODO【担当5】DB版ではSELECTで1件取得する。
-	private static Product findProductById(ArrayList<Product> products, String productId) {
+
+	// DB
+	private static Product findProductById(ProductRepository repository, String productId) throws SQLException {
+	// private static Product findProductById(ArrayList<Product> products, String productId) {
+
+		return repository.findById(productId);
 		
-		for (Product product : products) {
-			if (productId.equals(product.getProductId())) {
-				return product;
-			}
-		}
-		return null;
+		// for (Product product : products) {
+		// 	if (productId.equals(product.getProductId())) {
+		// 		return product;
+		// 	}
+		// }
+		// return null;
 	}
 }
