@@ -1,15 +1,7 @@
-/*
- * 【このクラスの役割】
- * 商品1件分の情報をまとめて持つクラス。検索結果や登録・変更する商品を、1つのProductとして扱えるようにする。
- *
- * TODO【担当3：検索・共通】
- * ・DBから取得するversion_noを変更・削除時に使えるよう、Productに持たせる方法を決める。
- * ・必要に応じてsid、deleted、作成日時、更新日時などのDB管理項目を追加する。
- * ・登録日は仕様書のyyyy-MM-ddを扱いやすい型・形式にそろえる。
- */
 package 商品管理システム;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Product {
 
@@ -129,14 +121,14 @@ public class Product {
 	
 	// Productをprintlnしたとき、検索結果と同じ並びで1行表示するための文字列を作る。
 	@Override
-	public String toString() {
-		return productId + ","
-				+ productCode + ","
-				+ productName + ","
-				+ category + ","
-				+ sellingPrice + ","
-				+ purchasePrice + ","
-				+ registrationDate;
-	}
+public String toString() {
+    return productId + ","
+            + Objects.toString(productCode, "") + ","
+            + Objects.toString(productName, "") + ","
+            + Objects.toString(category, "") + ","
+            + Objects.toString(sellingPrice, "") + ","
+            + Objects.toString(purchasePrice, "") + ","
+            + Objects.toString(registrationDate, "");
+}
 
 }
