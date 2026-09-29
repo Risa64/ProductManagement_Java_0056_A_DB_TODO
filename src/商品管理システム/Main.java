@@ -42,9 +42,8 @@ public class Main {
 					// メニュー番号に応じて担当クラスへ処理を渡す。
 					switch (menuNumber) {
 					case "1" -> Search.search(repository, sc);
-					// case "1" -> Search.search(products, sc);
-					// case "2" -> Register.register(products, sc);
-					// case "3" -> Update.update(products, sc);
+					case "2" -> Register.register(repository, sc);
+					case "3" -> Update.update(repository, sc);
 					case "4" -> Delete.delete(repository, sc);
 					case "0" -> {
 						System.out.println("プログラムを終了します。");
