@@ -20,6 +20,9 @@ public class InputScanner {
 		this.scanner = scanner;
 	}
 
+	/**
+	 * @佐伯
+	 */
 	public String nextLine() {
 		while (true) {
 			String input = scanner.nextLine();

@@ -11,13 +11,14 @@
 package 商品管理システム;
 
 import java.sql.SQLException;
-// import java.util.ArrayList;
 import java.util.List;
 
 public class Search {
 
+	/**
+	 * @佐伯
+	 */
 	public static void search(ProductRepository repository, InputScanner sc) {
-	// public static void search(ArrayList<Product> products, InputScanner sc) {
 
 		while (true) {
 			System.out.println("'------------------------------------");
@@ -27,11 +28,8 @@ public class Search {
 			String keyword = sc.nextLine();
 
 			// 入力されたキーワードに合う商品だけを集める。
-			// TODO【担当3】DB版ではこの呼び出しをrepository.search(keyword)へ変更する。
 			List<Product> result;
-			// List<Product> result = searchProducts(products, keyword);
 
-			// DB化
 			try {
 				result = searchProducts(repository, keyword);
 			} catch (SQLException e) {
@@ -63,31 +61,14 @@ public class Search {
 		}
 	}
 
-	
 	// 商品ID・商品コード・商品名のどれかにキーワードが含まれれば検索結果に入れる。
 	// 空文字の場合は全商品が条件に一致する。
+	/**
+	 * @佐伯
+	 */
 	private static List<Product> searchProducts(ProductRepository repository, String keyword) throws SQLException {
 
-	// private static List<Product> searchProducts(ArrayList<Product> products, String keyword) {
-		// List<Product> result = new ArrayList<>();
-
-		// for (Product product : products) {
-
-		// 	if (keyword.equals("")
-		// 			|| product.getProductId().contains(keyword)
-		// 			|| product.getProductCode().contains(keyword)
-		// 			|| product.getProductName().contains(keyword)) {
-
-		// 		result.add(product);
-		// 	}
-		// }
-
-		// 仕様どおり商品IDの昇順に並べる。
-		// TODO【担当3】DB版ではORDER BY product_idでDB側に並べてもらう。
-		// result.sort((a, b) -> a.getProductId().compareTo(b.getProductId()));
-
 		return repository.searchProduct(keyword);
-		// return result;
 		
 	}
 }
